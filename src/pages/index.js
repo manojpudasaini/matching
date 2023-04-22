@@ -7,10 +7,10 @@ export default function Home() {
   const canvasElement = useRef(null);
   const ctx = useRef(null);
   const [matchedData, setMatchedData] = useState([]);
+  const [interactionData, setInteractionData] = useState(matchData);
   let isMousePressed = false;
   let initPosition;
   let trackOfLines = [];
-  let isCorrect;
   useEffect(() => {
     if (canvas.current) {
       canvasElement.current = canvas.current;
@@ -128,14 +128,11 @@ export default function Home() {
     trackOfLines[trackOfLines.length - 1]["end"]["y"] = currentPosition.y;
     trackOfLines[trackOfLines.length - 1]["end"]["id"] = key;
     trackOfLines[trackOfLines.length - 1]["end"]["url"] = item.imageUrl;
-    console.log(trackOfLines);
   }
 
   function checkAnswerHandler() {
-    let flag = false;
-    trackOfLines.forEach(function (item) {
-      flag = item.start.url === item.end.url;
-    });
+    let flag;
+    flag = trackOfLines.every((item) => item.start.url === item.end.url);
     console.log(flag);
     return flag;
   }
@@ -144,7 +141,7 @@ export default function Home() {
     <>
       <main className="flex p-24">
         <div className={"flex flex-col space-y-4"}>
-          {matchData.map((item, index) => (
+          {interactionData?.map((item, index) => (
             <div
               className={
                 "border-2 border-amber-400 rounded-lg relative h-20 w-20 p-2"
@@ -173,7 +170,7 @@ export default function Home() {
           <canvas ref={canvas} />
         </div>
         <div className={"flex flex-col space-y-6 py-10"}>
-          {matchData.map((item, index) => (
+          {interactionData?.map((item, index) => (
             <div
               className={"p-2 border-2 border-amber-400 rounded-lg relative"}
               key={item.name}
